@@ -2,11 +2,11 @@
 
 ## /etc/cassandra/cassandra.yaml
 cluster_name: 'My Cluster'
-listen_address: "{{ (ansible_eth0 | default(ansible_lo)).ipv4.address }}"
+listen_address: "{{ ansible_eth0.ipv4.address }}"
 batch_size_warn_threshold_in_kb: 50
 batch_size_fail_threshold_in_kb: 500
 start_rpc: true
-rpc_address: "{{ (ansible_eth0 | default(ansible_lo)).ipv4.address }}"
+rpc_address: "{{ ansible_eth0.ipv4.address }}"
 
 ## /etc/cassandra/cassandra-rackdc.properties
 rackdc_properties: dc=CBDEV
