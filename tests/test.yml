@@ -1,6 +1,5 @@
 # test.yml
 ---
 - hosts: all
-  gather_facts: True
   roles:
     - role_under_test
