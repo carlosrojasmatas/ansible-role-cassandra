@@ -3,11 +3,6 @@
 
 ######################################################################################################
 
-- name: Stop Service
-  service: name=cassandra state=stopped
-
-######################################################################################################
-
 - name: Remove /data/system/ contents
   file:
     path: /var/lib/cassandra/data/system/*
@@ -20,6 +15,7 @@
     dest: /etc/init.d/cassandra
     regexp: '^#*CMD_PATT='
     line: 'CMD_PATT="cassandra"'
+  notify: restart cassandra
 
 ######################################################################################################
 
@@ -27,6 +23,7 @@
   template:
     dest: /etc/cassandra/cassandra.yml
     src: cassandra.yaml.j2
+  notify: restart cassandra
 
 ######################################################################################################
 
@@ -35,6 +32,7 @@
     dest: /etc/cassandra/cassandra-rackdc.properties
     regexp: '^#*dc=.*'
     line: "{{ rackdc_properties }}"
+  notify: restart cassandra
 
 ######################################################################################################
 
@@ -49,10 +47,10 @@
 
 ######################################################################################################
 
-- name: Start Service
-  service: name=cassandra state=started enabled=yes
-
 # Cassandra takes a bit to start
 - pause: seconds=30
 
 ######################################################################################################
+
+- name: Ensure Cassandra is running and enabled on boot.
+  service: name=cassandra state=started enabled=yes

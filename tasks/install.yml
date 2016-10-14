@@ -12,8 +12,13 @@
     repo: ppa:webupd8team/java
     state: present
 
-- shell: echo debconf shared/accepted-oracle-license-v1-1 select true | debconf-set-selections
-- shell: echo debconf shared/accepted-oracle-license-v1-1 seen true | debconf-set-selections
+######################################################################################################
+
+- name: Accept Oracle License
+  debconf: name=java question="shared/accepted-oracle-license-v1-1" value=true vtype="boolean"
+
+# - shell: echo debconf shared/accepted-oracle-license-v1-1 select true | debconf-set-selections
+# - shell: echo debconf shared/accepted-oracle-license-v1-1 seen true | debconf-set-selections
 
 ######################################################################################################
 
