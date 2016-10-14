@@ -57,6 +57,4 @@
 # Forcing install for now, since the above does not work
 
 - name: Install Cassandra
-  apt: name={{item}} update_cache=yes force=yes
-  with_items:
-    - cassandra
+  apt: name=cassandra update_cache=yes force=yes
