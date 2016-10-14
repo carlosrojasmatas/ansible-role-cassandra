@@ -7,7 +7,6 @@ services:
 before_install:
   # Pull container.
   - 'sudo docker pull ubuntu'
-  - sudo docker build --rm=true --tag=travispoc .
 
 script:
   # Run container in detached state
@@ -18,6 +17,9 @@ script:
   - sudo docker exec "$(cat /tmp/container_id)" ansible-playbook /etc/ansible/roles/role_under_test/test.yml
   # Clean up
   - sudo docker stop "$(cat /tmp/container_id)"
+
+after_failure:
+  - 'sudo docker exec --tty "$(cat ${container_id})" env TERM=xterm cat /var/log/cassandra/system.log'
 
 after_success:
   # Clean up.
