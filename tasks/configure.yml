@@ -1,0 +1,58 @@
+
+---
+
+######################################################################################################
+
+- name: Stop Service
+  service: name=cassandra state=stopped
+
+######################################################################################################
+
+- name: Remove /data/system/ contents
+  file:
+    path: /var/lib/cassandra/data/system/*
+    state: absent
+
+######################################################################################################
+
+- name: Update /etc/init.d/cassandra
+  lineinfile:
+    dest: /etc/init.d/cassandra
+    regexp: '^#*CMD_PATT='
+    line: 'CMD_PATT="cassandra"'
+
+######################################################################################################
+
+- name: Copy over cassandra.yaml template
+  template:
+    dest: /etc/cassandra/cassandra.yml
+    src: cassandra.yaml.j2
+
+######################################################################################################
+
+- name: Update /etc/cassandra/cassandra-rackdc.properties
+  lineinfile:
+    dest: /etc/cassandra/cassandra-rackdc.properties
+    regexp: '^#*dc=.*'
+    line: "{{ rackdc_properties }}"
+
+######################################################################################################
+
+# Not sure if this is required
+
+# - name: Reboot Machine
+#   shell: reboot
+#
+# - name: Wait for reboot
+#   sudo: no
+#   local_action: wait_for host="{{ ansible_default_ipv4.address }}" port=22 delay=30 timeout=300
+
+######################################################################################################
+
+- name: Start Service
+  service: name=cassandra state=started enabled=yes
+
+# Cassandra takes a bit to start
+- pause: seconds=30
+
+######################################################################################################

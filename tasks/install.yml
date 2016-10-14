@@ -1,0 +1,57 @@
+---
+
+- name: Install software-properties-common
+  apt: name={{item}} update_cache=yes
+  with_items:
+    - software-properties-common
+
+######################################################################################################
+
+- name: Add 'ppa:webupd8team/java' repo
+  apt_repository:
+    repo: ppa:webupd8team/java
+    state: present
+
+- shell: echo debconf shared/accepted-oracle-license-v1-1 select true | debconf-set-selections
+- shell: echo debconf shared/accepted-oracle-license-v1-1 seen true | debconf-set-selections
+
+######################################################################################################
+
+- name: Create /etc/apt/sources.list.d
+  file:
+    path: /etc/apt/sources.list.d
+    state: directory
+    mode: 0755
+
+- name: Update /etc/apt/sources.list.d/cassandra.sources.list
+  lineinfile:
+    create: yes
+    dest: /etc/apt/sources.list.d/cassandra.sources.list
+    line: "{{ item }}"
+  with_items:
+    - deb [arch=amd64] http://www.apache.org/dist/cassandra/debian 22x main
+    - deb-src [arch=amd64] http://www.apache.org/dist/cassandra/debian 22x main
+
+######################################################################################################
+
+
+- name: Install Java 8
+  apt: name={{item}} update_cache=yes
+  with_items:
+    - oracle-java8-set-default
+
+######################################################################################################
+
+# - name: Install Repository keys
+#   apt_key:
+#    keyserver: keyserver.ubuntu.com
+#    id: 749D6EEC0353B12C
+
+######################################################################################################
+
+# Forcing install for now, since the above does not work
+
+- name: Install Cassandra
+  apt: name={{item}} update_cache=yes force=yes
+  with_items:
+    - cassandra
