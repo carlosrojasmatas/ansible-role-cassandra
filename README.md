@@ -1,10 +1,12 @@
 # Ansible Role: Cassandra
 
-Installs [Cassandra](http://cassandra.apache.org/) on Ubuntu.
+[![Build Status](https://travis-ci.org/davey-dev/ansible-role-cassandra.svg?branch=master)](https://travis-ci.org/davey-dev/ansible-role-cassandra)
+
+Installs [Cassandra](http://cassandra.apache.org/) on Debian/Ubuntu.
 
 ## Requirements
 
-Ubuntu
+Debian/Ubuntu
 
 ## Role Variables
 
@@ -30,7 +32,7 @@ None.
 
     - hosts: all
       roles:
-        - { role: cassandra }
+        - { role: davey-dev.cassandra }
 
 ## License
 
