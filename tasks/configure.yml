@@ -15,7 +15,6 @@
     dest: /etc/init.d/cassandra
     regexp: '^#*CMD_PATT='
     line: 'CMD_PATT="cassandra"'
-  notify: reboot
 
 ######################################################################################################
 
@@ -23,7 +22,6 @@
   template:
     dest: /etc/cassandra/cassandra.yml
     src: cassandra.yaml.j2
-  notify: reboot
 
 ######################################################################################################
 
@@ -32,7 +30,11 @@
     dest: /etc/cassandra/cassandra-rackdc.properties
     regexp: '^#*dc=.*'
     line: "{{ rackdc_properties }}"
-  notify: reboot
+
+######################################################################################################
+
+- name: Reboot Machine
+  shell: reboot
 
 ######################################################################################################
 
