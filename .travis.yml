@@ -1,15 +1,20 @@
 ---
 sudo: required
 
+env:
+  - distro: ubuntu1604
+    init: /lib/systemd/systemd
+    run_opts: "--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro"
+
 services:
   - docker
 
 before_install:
   # Pull container.
-  - 'sudo docker pull ubuntu'
+  - 'sudo docker pull geerlingguy/docker-${distro}-ansible:latest'
 
 script:
-    - container_id=$(mktemp)
+  - container_id=$(mktemp)
   # Run container in detached state.
   - 'sudo docker run --detach --volume="${PWD}":/etc/ansible/roles/role_under_test:ro ${run_opts} geerlingguy/docker-${distro}-ansible:latest "${init}" > "${container_id}"'
 
