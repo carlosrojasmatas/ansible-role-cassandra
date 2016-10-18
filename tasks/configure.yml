@@ -21,7 +21,7 @@
 
 - name: Copy over cassandra.yaml template
   template:
-    dest: /etc/cassandra/cassandra.yml
+    dest: /etc/cassandra/cassandra.yaml
     src: cassandra.yaml.j2
   notify: restart cassandra
 
